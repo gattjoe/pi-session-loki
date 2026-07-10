@@ -1,7 +1,7 @@
 {
   "name": "pi-session-loki",
   "version": "0.0.1",
-  "description": "Ships pi coding agent session transcripts to Loki when a session ends.",
+  "description": "Ships pi coding agent session transcripts to Loki and mirrors the session as OTel traces to Tempo.",
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.mjs"
@@ -13,7 +13,10 @@
     "extension",
     "loki",
     "logging",
-    "session"
+    "session",
+    "otel",
+    "opentelemetry",
+    "tracing"
   ],
   "author": "Joe Gatt",
   "license": "MIT",
@@ -25,6 +28,13 @@
     "url": "https://github.com/gattjoe/pi-session-loki/issues"
   },
   "homepage": "https://github.com/gattjoe/pi-session-loki#readme",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.205.0",
+    "@opentelemetry/resources": "^2.0.1",
+    "@opentelemetry/sdk-trace-base": "^2.0.1",
+    "@opentelemetry/semantic-conventions": "^1.37.0"
+  },
   "peerDependencies": {
     "@earendil-works/pi-ai": "*",
     "@earendil-works/pi-coding-agent": "*",
