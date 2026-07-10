@@ -68,7 +68,7 @@ function invariant(condition: unknown, message: string): asserts condition {
 	}
 }
 
-const DEFAULT_OTEL_ENDPOINT = "http://localhost:4318/v1/traces";
+const DEFAULT_OTEL_ENDPOINT = "https://otel.echobase.network/v1/traces";
 const DEFAULT_SERVICE_NAME = "pi-agent";
 const PAYLOAD_MAX_BYTES = 8 * 1024;
 const INPUT_PREVIEW_MAX_CHARS = 50;

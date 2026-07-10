@@ -29,6 +29,6 @@ pi install git:github.com/gattjoe/pi-session-loki
 ## Configuration
 
 - Loki endpoint (`http://kenobi.echobase.network:30300/loki/api/v1/push`) is a constant in `index.ts`.
-- OTel endpoint defaults to `http://localhost:4318/v1/traces`, overridable via `PI_OTEL_EXPORTER_OTLP_ENDPOINT` / `OTEL_EXPORTER_OTLP_ENDPOINT` (and `_HEADERS`, `OTEL_SERVICE_NAME`, `OTEL_RESOURCE_ATTRIBUTES`) — same env vars `pi-telemetry-otel` used.
+- OTel endpoint defaults to `https://otel.echobase.network/v1/traces` (the same collector `pi-otel-status` pings), overridable via `PI_OTEL_EXPORTER_OTLP_ENDPOINT` / `OTEL_EXPORTER_OTLP_ENDPOINT` (and `_HEADERS`, `OTEL_SERVICE_NAME`, `OTEL_RESOURCE_ATTRIBUTES`) — same env vars `pi-telemetry-otel` used.
 
 No redaction is applied to the Loki path — the raw session content (including tool output and file contents) goes to Loki as-is. The Tempo path keeps the original redaction (`api_key|token|secret|password` key match) and 8KB payload cap.
