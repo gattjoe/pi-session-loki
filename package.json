@@ -1,0 +1,39 @@
+{
+  "name": "pi-session-loki",
+  "version": "0.0.1",
+  "description": "Ships pi coding agent session transcripts to Loki when a session ends.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "pi-package",
+    "pi",
+    "pi-coding-agent",
+    "extension",
+    "loki",
+    "logging",
+    "session"
+  ],
+  "author": "Joe Gatt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gattjoe/pi-session-loki.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gattjoe/pi-session-loki/issues"
+  },
+  "homepage": "https://github.com/gattjoe/pi-session-loki#readme",
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
