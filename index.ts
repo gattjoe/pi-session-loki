@@ -362,7 +362,11 @@ function createTracer(config: TelemetryConfig): { tracer: Tracer; shutdown: () =
 			} catch (e) {
 				console.error(`[pi-session-loki] otel flush error: ${(e as Error).message}`);
 			}
-			await provider.shutdown();
+			try {
+				await provider.shutdown();
+			} catch (e) {
+				console.error(`[pi-session-loki] otel shutdown error: ${(e as Error).message}`);
+			}
 		},
 	};
 }
@@ -736,7 +740,11 @@ export default function (pi: ExtensionAPI) {
 			endSpan(spans.session, Date.now());
 			spans.session = undefined;
 			traceEnvStack.clear();
-			await otelShutdown?.();
+			try {
+				await otelShutdown?.();
+			} catch (e) {
+				console.error(`[pi-session-loki] otel shutdown error: ${(e as Error).message}`);
+			}
 		}
 	});
 
@@ -786,6 +794,10 @@ export default function (pi: ExtensionAPI) {
 		traceEnvStack.clear();
 		updateTraceStatus(ctx, undefined);
 
-		await otelShutdown?.();
+		try {
+			await otelShutdown?.();
+		} catch (e) {
+			console.error(`[pi-session-loki] otel shutdown error: ${(e as Error).message}`);
+		}
 	});
 }
