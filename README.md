@@ -16,7 +16,7 @@ pi install git:github.com/gattjoe/pi-session-loki
 
 ## What it does
 
-**Loki**: on `session_switch` and `session_shutdown`, reads the full session file and POSTs its lines as one stream (labels: `job=pi-session`, `project`, `session_id`). Each session is shipped exactly once, in full, after it ends — this does not stream partial content from a session that's still running.
+**Loki**: on `session_start` (reason `new`/`resume`/`fork`) and `session_shutdown`, reads the full session file and POSTs its lines as one stream (labels: `job=pi-session`, `project`, `session_id`). Each session is shipped exactly once, in full, after it ends — this does not stream partial content from a session that's still running.
 
 | Status | Meaning |
 |--------|---------|

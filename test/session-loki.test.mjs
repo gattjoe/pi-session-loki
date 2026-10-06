@@ -19,7 +19,7 @@ async function withSessionFile(lines, run) {
 }
 
 // Drives the extension against a fake pi/ctx and a stubbed fetch, exercising
-// the session_start -> session_switch -> session_shutdown ship sequence.
+// the session_start(startup) -> session_start(resume) -> session_shutdown ship sequence.
 function run(sessionFile, fetchImpl) {
 	const script = `
 		globalThis.fetch = ${fetchImpl};
@@ -51,7 +51,7 @@ function run(sessionFile, fetchImpl) {
 		const extension = (await import(${JSON.stringify(indexUrl)})).default;
 		extension(pi);
 
-		await handlers.session_start({ type: "session_start" }, ctx);
+		await handlers.session_start({ type: "session_start", reason: "startup" }, ctx);
 		await handlers.session_shutdown({ type: "session_shutdown" }, ctx);
 
 		console.log(JSON.stringify({ statuses, requests }));
@@ -116,8 +116,8 @@ test("does not ship the same session twice", async () => {
 			const extension = (await import(${JSON.stringify(indexUrl)})).default;
 			extension(pi);
 
-			await handlers.session_start({ type: "session_start" }, ctx);
-			await handlers.session_switch({ type: "session_switch" }, ctx);
+			await handlers.session_start({ type: "session_start", reason: "startup" }, ctx);
+			await handlers.session_start({ type: "session_start", reason: "resume" }, ctx);
 			await handlers.session_shutdown({ type: "session_shutdown" }, ctx);
 
 			console.log(JSON.stringify({ calls }));
@@ -163,7 +163,7 @@ test("runs a full agent/turn/tool lifecycle without throwing and still ships to 
 			const extension = (await import(${JSON.stringify(indexUrl)})).default;
 			extension(pi);
 
-			await handlers.session_start({ type: "session_start" }, ctx);
+			await handlers.session_start({ type: "session_start", reason: "startup" }, ctx);
 			await handlers.input({ text: "do the thing", source: "interactive" }, ctx);
 			await handlers.agent_start({}, ctx);
 			await handlers.turn_start({ turnIndex: 0, timestamp: Date.now() }, ctx);

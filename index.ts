@@ -563,27 +563,22 @@ export default function (pi: ExtensionAPI) {
 
 	// -- Combined lifecycle hooks -------------------------------------------
 
-	pi.on("session_start", (_event, ctx) => {
+	pi.on("session_start", async (event, ctx) => {
+		const replaced = event.reason === "new" || event.reason === "resume" || event.reason === "fork";
+		if (replaced) {
+			// session_switch was removed in pi 0.65; replacement now arrives as session_start.
+			await shipSessionToLoki(ctx, activeSessionId, activeSessionFile);
+			closeOrphanToolSpans("session_switch");
+			closeOrphanTurnSpans("session_switch");
+			closeOrphanAgentSpan("session_switch");
+			endSpan(spans.session, Date.now());
+			spans.session = undefined;
+			traceEnvStack.clear();
+			updateTraceStatus(ctx, undefined);
+		}
 		activeSessionId = ctx.sessionManager.getSessionId();
 		activeSessionFile = ctx.sessionManager.getSessionFile();
 
-		otelSessionId = activeSessionId;
-		lastInputSummary = undefined;
-		ensureSessionSpan(ctx);
-	});
-
-	pi.on("session_switch", async (_event, ctx) => {
-		await shipSessionToLoki(ctx, activeSessionId, activeSessionFile);
-		activeSessionId = ctx.sessionManager.getSessionId();
-		activeSessionFile = ctx.sessionManager.getSessionFile();
-
-		closeOrphanToolSpans("session_switch");
-		closeOrphanTurnSpans("session_switch");
-		closeOrphanAgentSpan("session_switch");
-		endSpan(spans.session, Date.now());
-		spans.session = undefined;
-		traceEnvStack.clear();
-		updateTraceStatus(ctx, undefined);
 		otelSessionId = activeSessionId;
 		lastInputSummary = undefined;
 		ensureSessionSpan(ctx);
